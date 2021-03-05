@@ -1,4 +1,4 @@
-package com.formacion.microservicios.app.gateway;
+package com.maintenance.aplication;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
