@@ -39,20 +39,20 @@
 		<h1 class="tittle my-5">
 			Maintenance <span class="text-danger">Bike</span>
 		</h1>
-	<div class="mx-auto col-sm-8 main-section" id="myTab" role="tablist">
+	<div class="mx-auto col-sm-10 main-section" id="myTab" role="tablist">
 		<ul class="nav nav-tabs justify-content-end">
 			<li class="nav-item">
-			<a class="nav-link active" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="false">Lista usuarios</a>
+			<a class="nav-link" th:classappend="${listTab}" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="false">Lista usuarios</a>
 			</li>
 			<li class="nav-item">
-			<a class="nav-link" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="true">Formulario</a>				   	
+			<a class="nav-link" th:classappend="${formTab}" id="form-tab" data-toggle="tab" href="#form" role="tab" aria-controls="form" aria-selected="true">Formulario</a>				   	
 			</li>
 		</ul>
 		<div class="tab-content" id="myTabContent">
 			<div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list-tab">
 				<div class="card">
 					<div class="card-header">
-						<h4>Roster</h4>
+						<h4>Usuarios</h4>
 					</div>
 					<div class="card-body">
 						<div th:include="user-form/user-list.html" th:remove="tag"></div>
