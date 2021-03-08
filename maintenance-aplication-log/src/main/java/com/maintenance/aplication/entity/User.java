@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 @Entity
@@ -28,19 +31,29 @@ public class User implements Serializable{
 	@GenericGenerator(name="native",strategy="native")
 	private Long id;
 	
-	@Column 
+	@Column
+	@NotBlank // para las validaciones hay que importar la dependecia de validaciones
+	@Size(min=5,max=20, message="No se cumplen las reglas de tamaño.")
 	private String firstName;
 	
-	@Column 
+	@Column
+	@NotBlank 
+	@Size(min=5,max=40, message="No se cumplen las reglas de tamaño.")
 	private String lastName;
 	
 	@Column(unique = true) 
+	@NotBlank 
+	@Email
 	private String email;
 	
 	@Column(unique = true) 
+	@NotBlank 
+	@Size(min=5,max=12, message="No se cumplen las reglas de tamaño.")
 	private String username;
 	
 	@Column
+	@NotBlank 
+	@Size(min=5, message="El password debe tener como mínimo 5 carácteres.")
 	private String password;
 	
 	@Transient // para omitir este valor en la base de datos
