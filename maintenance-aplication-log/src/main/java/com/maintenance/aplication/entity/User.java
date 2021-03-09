@@ -33,12 +33,12 @@ public class User implements Serializable{
 	
 	@Column
 	@NotBlank // para las validaciones hay que importar la dependecia de validaciones
-	@Size(min=5,max=20, message="No se cumplen las reglas de tamaño.")
+	@Size(min=2,max=20, message="No se cumplen las reglas de tamaño.")
 	private String firstName;
 	
 	@Column
 	@NotBlank 
-	@Size(min=5,max=40, message="No se cumplen las reglas de tamaño.")
+	@Size(min=2,max=40, message="No se cumplen las reglas de tamaño.")
 	private String lastName;
 	
 	@Column(unique = true) 
@@ -57,6 +57,7 @@ public class User implements Serializable{
 	private String password;
 	
 	@Transient // para omitir este valor en la base de datos
+	@NotBlank 
 	private String confirmPassword;
 	
 	@ManyToMany(fetch = FetchType.LAZY)

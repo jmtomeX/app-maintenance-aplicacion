@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -43,14 +44,18 @@ public class UserController {
 		if (result.hasErrors()) {
 			model.addAttribute("userForm", user);
 			model.addAttribute("formTab", "active");
+
 		} else {
 			try {
+				userService.createUser(user);
 				model.addAttribute("userForm", new User());
 				model.addAttribute("lisTab", "active");
 			} catch (Exception e) {
-				model.addAttribute("formError", e.getMessage());
+				model.addAttribute("formErrorMessage", e.getMessage());
 				model.addAttribute("userForm", user);
 				model.addAttribute("formTab", "active");
+				model.addAttribute("userList", userService.getAllUsers());
+				model.addAttribute("roles", roleRepository.findAll());
 			}
 		}
 		model.addAttribute("userList", userService.getAllUsers());

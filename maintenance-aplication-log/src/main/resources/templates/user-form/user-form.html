@@ -1,115 +1,121 @@
 <form class="form-horizontal" role="form" autocomplete="off"
 	th:object="${userForm}" th:action="@{/userForm}" method="post">
 
-		<div class="card-body light col-md-12">
-			<div class="row g-3 align-items-center my-4">
-				<div class="col-sm-2">
-					<label for="name" class="col-form-label">Nombre</label>
-				</div>
-				<div class="col-sm-10">
-					<input id="name" class="form-control" type="text"
-						th:field="${userForm.firstName}" aria-describedby="nameHelpInline">
-				</div>
-				<div class="col-auto">
-					<span id="nameHelpInline" th:if="${#fields.hasErrors('firstName')}"
-						th:errors="*{firstName}" class="form-text ">Name Error</span>
-				</div>
+	<div class="card-body light col-md-12">
+		<div class="row g-3 align-items-center my-4">
+			<div class="col-sm-2">
+				<label for="name" class="col-form-label">Nombre</label>
 			</div>
-
-
-			<div class="row g-3 align-items-center my-2">
-				<div class="col-sm-2">
-					<label class="col-form-label">Apellidos</label>
-				</div>
-				<div class="col-sm-10">
-					<input class="form-control" type="text"
-						th:field="${userForm.lastName}">
-				</div>
-				<div class="col-auto">
-					<span th:if="${#fields.hasErrors('lastName')}"
-						th:errors="*{lastName}" class="form-text my-2">Name Error</span>
-				</div>
+			<div class="col-sm-10">
+				<input id="name" class="form-control" type="text"
+					th:field="${userForm.firstName}" aria-describedby="nameHelpInline">
 			</div>
-
-			<div class="row g-3 align-items-center my-2">
-				<div class="col-sm-2">
-					<label class="col-form-label">Email</label>
-				</div>
-				<div class="col-sm-10">
-					<input class="form-control" type="email"
-						th:field="${userForm.email}">
-				</div>
-				<div class="col-auto">
-					<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-						class="form-text my-2">Name Error</span>
-				</div>
-			</div>
-
-
-			<div class="row g-3 align-items-center my-2">
-				<div class="col-sm-2">
-					<label class="col-form-label">Usuario</label>
-				</div>
-				<div class="col-sm-10">
-					<input class="form-control" type="text"
-						th:field="${userForm.username}">
-				</div>
-				<div class="col-auto">
-					<span th:if="${#fields.hasErrors('username')}"
-						th:errors="*{username}" class="form-text my-2">Name Error</span>
-				</div>
-			</div>
-			<div class="row g-3 align-items-center my-2">
-				<div class="col-sm-6">
-					<label class="col-form-label">Roles</label>
-				</div>
-				<div class="col-sm-6">
-					<select class="form-control" size="3" th:field="${userForm.roles}">
-						<option th:each="role :${roles}" th:value="${role.id}"
-							th:text="${role.name}"></option>
-					</select>
-				</div>
-				<div class="col-auto">
-					<span th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"
-						class="form-text my-2">Name Error</span>
-				</div>
-			</div>
-
-			<div class="row g-3 align-items-center my-2">
-				<div class="col-sm-2">
-					<label class="col-form-label">Password</label>
-				</div>
-				<div class="col-sm-10">
-					<input class="form-control" type="password"
-						th:field="${userForm.password}">
-				</div>
-				<div class="col-auto">
-					<span th:if="${#fields.hasErrors('password')}"
-						th:errors="*{password}" class="form-text my-2">Name Error</span>
-				</div>
-			</div>
-
-			<div class="row g-3 align-items-center my-2">
-				<div class="col-sm-2">
-					<label class="col-form-label">Password</label>
-				</div>
-				<div class="col-sm-10">
-					<input class="form-control" type="password"
-						th:field="${userForm.confirmPassword}">
-				</div>
-				<div class="col-auto">
-					<span th:if="${#fields.hasErrors('confirmPassword')}"
-						th:errors="*{confirmPassword}" class="form-text my-2">Name
-						Error</span>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="text-center">
-					<input type="reset" class="btn btn-secondary my-3" value="Cancelar">
-					<input type="submit" class="btn btn-primary my-3" value="Registrar">
-				</div>
+			<div class="col-auto alert-danger my-2">
+				<span id="nameHelpInline" th:if="${#fields.hasErrors('firstName')}"
+					th:errors="*{firstName}" class="form-text ">Name Error</span>
 			</div>
 		</div>
+
+
+		<div class="row g-3 align-items-center my-2">
+			<div class="col-sm-2">
+				<label class="col-form-label">Apellidos</label>
+			</div>
+			<div class="col-sm-10">
+				<input class="form-control" type="text"
+					th:field="${userForm.lastName}">
+			</div>
+			<div class="col-auto alert-danger my-2">
+				<span th:if="${#fields.hasErrors('lastName')}"
+					th:errors="*{lastName}" class="form-text my-2">Name Error</span>
+			</div>
+		</div>
+
+		<div class="row g-3 align-items-center my-2">
+			<div class="col-sm-2">
+				<label class="col-form-label">Email</label>
+			</div>
+			<div class="col-sm-10">
+				<input class="form-control" type="email"
+					th:field="${userForm.email}">
+			</div>
+			<div class="col-auto alert-danger my-2">
+				<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+					class="form-text my-2">Name Error</span>
+			</div>
+		</div>
+
+
+		<div class="row g-3 align-items-center my-2">
+			<div class="col-sm-2">
+				<label class="col-form-label">Usuario</label>
+			</div>
+			<div class="col-sm-10">
+				<input class="form-control" type="text"
+					th:field="${userForm.username}">
+			</div>
+			<div class="col-auto alert-danger my-2">
+				<span th:if="${#fields.hasErrors('username')}"
+					th:errors="*{username}" class="form-text my-2">Name Error</span>
+			</div>
+		</div>
+		<div class="row g-3 align-items-center my-2">
+			<div class="col-sm-6">
+				<label class="col-form-label">Roles</label>
+			</div>
+			<div class="col-sm-6">
+				<select class="form-control" size="3" th:field="${userForm.roles}">
+					<option th:each="role :${roles}" th:value="${role.id}"
+						th:text="${role.name}"></option>
+				</select>
+			</div>
+			<div class="col-auto alert-danger my-2">
+				<span th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"
+					class="form-text my-2">Name Error</span>
+			</div>
+		</div>
+
+		<div class="row g-3 align-items-center my-2">
+			<div class="col-sm-2">
+				<label class="col-form-label">Password</label>
+			</div>
+			<div class="col-sm-10">
+				<input class="form-control" type="password"
+					th:field="${userForm.password}">
+			</div>
+			<div class="col-auto alert-danger my-2">
+				<span th:if="${#fields.hasErrors('password')}"
+					th:errors="*{password}" class="form-text my-2">Name Error</span>
+			</div>
+		</div>
+
+		<div class="row g-3 align-items-center my-2">
+			<div class="col-sm-2">
+				<label class="col-form-label">Password</label>
+			</div>
+			<div class="col-sm-10">
+				<input class="form-control" type="password"
+					th:field="${userForm.confirmPassword}">
+			</div>
+			<div class="col-auto alert-danger my-2">
+				<span th:if="${#fields.hasErrors('confirmPassword')}"
+					th:errors="*{confirmPassword}" class="form-text my-2">Name
+					Error</span>
+			</div>
+		</div>
+		
+		<div class="col-auto alert-danger my-2">
+		<span th:if="${formErrorMessage}" th:text="${formErrorMessage}"
+			class="form-text my-2">Mensaje Error</span>
+	</div>
+
+		<div class="form-group">
+			<div class="text-center">
+				<input type="reset" class="btn btn-secondary my-3" value="Cancelar">
+				<input type="submit" class="btn btn-primary my-3" value="Registrar">
+			</div>
+		</div>
+	</div>
+	
 
 </form>
