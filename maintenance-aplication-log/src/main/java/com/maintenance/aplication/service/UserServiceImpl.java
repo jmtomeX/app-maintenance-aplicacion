@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 		if (userFound.isPresent()) {
 			throw new Exception("Username no disponible.");
 		}
-		return false;
+		return true;
 	}
 	
 	private boolean checkPasswordValid(User user) throws Exception {
