@@ -1,5 +1,5 @@
 <form class="form-horizontal" role="form" autocomplete="off"
-	th:object="${userForm}" th:action="@{/userForm}" method="post">
+	th:object="${userForm}" th:action="${editMode} ? @{/editUser}: @{/userForm}" method="post">
 
 	<div class="card-body light col-md-12">
 		<div class="row g-3 align-items-center my-4">
@@ -104,7 +104,7 @@
 		<div class="form-group">
 			<div class="text-center">
 				<input type="reset" class="btn btn-secondary my-3" value="Cancelar">
-				<input type="submit" class="btn btn-primary my-3" value="Registrar">
+				<input type="submit" class="btn btn-primary my-3" th:value="${editMode}?'Guardar usuario':'Crear usuario'">
 			</div>
 		</div>
 	</div>
