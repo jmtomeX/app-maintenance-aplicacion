@@ -46,10 +46,12 @@ public class UserController {
 			model.addAttribute("formTab", "active");
 
 		} else {
+			
 			try {
 				userService.createUser(user);
 				model.addAttribute("userForm", new User());
-				model.addAttribute("lisTab", "active");
+				model.addAttribute("listTab", "active");
+				
 			} catch (Exception e) {
 				model.addAttribute("formErrorMessage", e.getMessage());
 				model.addAttribute("userForm", user);
