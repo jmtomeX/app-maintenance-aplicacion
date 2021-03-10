@@ -20,8 +20,8 @@
 				<td th:text="${user.username}"></td>
 				<td th:text="${user.email}"></td>
 				<td><a href="#" th:href="@{'/editUser/'+ ${user.id}}"><i
-						class="fas fa-edit"></i></a> | <a href="#"
-					th:onclick="'javascript:confirmDelete(\''+ ${user.id} +'\');'"><i
+						class="fas fa-edit"></i></a> <a href="#" class="text-danger"
+					th:onclick="'javascript:confirmDelete('\'+ ${user.id} +'\');'"><i
 						class="fas fa-user-times"></i></a></td>
 			</tr>
 		</tbody>

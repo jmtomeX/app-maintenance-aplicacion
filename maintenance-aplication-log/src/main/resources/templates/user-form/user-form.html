@@ -10,10 +10,11 @@
 				<input id="name" class="form-control" type="text"
 					th:field="${userForm.firstName}" aria-describedby="nameHelpInline">
 			</div>
-			<div class="col-auto alert-danger my-2">
-				<span id="nameHelpInline" th:if="${#fields.hasErrors('firstName')}"
-					th:errors="*{firstName}" class="form-text ">Name Error</span>
-			</div>
+
+			<div id="nameHelpInline" th:if="${#fields.hasErrors('firstName')}"
+				th:errors="*{firstName}" class="col-auto alert-danger my-2">Name
+				Error</div>
+
 		</div>
 
 
@@ -25,10 +26,9 @@
 				<input class="form-control" type="text"
 					th:field="${userForm.lastName}">
 			</div>
-			<div class="col-auto alert-danger my-2">
-				<span th:if="${#fields.hasErrors('lastName')}"
-					th:errors="*{lastName}" class="form-text my-2">Name Error</span>
-			</div>
+			<div class="col-auto alert-danger my-2"
+				th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Name
+				Error</div>
 		</div>
 
 		<div class="row g-3 align-items-center my-2">
@@ -39,10 +39,9 @@
 				<input class="form-control" type="email"
 					th:field="${userForm.email}">
 			</div>
-			<div class="col-auto alert-danger my-2">
-				<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-					class="form-text my-2">Name Error</span>
-			</div>
+			<div class="col-auto alert-danger my-2"
+				th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name
+				Error</div>
 		</div>
 
 
@@ -54,10 +53,9 @@
 				<input class="form-control" type="text"
 					th:field="${userForm.username}">
 			</div>
-			<div class="col-auto alert-danger my-2">
-				<span th:if="${#fields.hasErrors('username')}"
-					th:errors="*{username}" class="form-text my-2">Name Error</span>
-			</div>
+			<div class="col-auto alert-danger my-2"
+				th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name
+				Error</div>
 		</div>
 		<div class="row g-3 align-items-center my-2">
 			<div class="col-sm-6">
@@ -69,10 +67,9 @@
 						th:text="${role.name}"></option>
 				</select>
 			</div>
-			<div class="col-auto alert-danger my-2">
-				<span th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"
-					class="form-text my-2">Name Error</span>
-			</div>
+			<div class="col-auto alert-danger my-2"
+				th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Name
+				Error</div>
 		</div>
 
 		<div class="row g-3 align-items-center my-2">
@@ -83,10 +80,9 @@
 				<input class="form-control" type="password"
 					th:field="${userForm.password}">
 			</div>
-			<div class="col-auto alert-danger my-2">
-				<span th:if="${#fields.hasErrors('password')}"
-					th:errors="*{password}" class="form-text my-2">Name Error</span>
-			</div>
+			<div class="col-auto alert-danger my-2"
+				th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name
+				Error</div>
 		</div>
 
 		<div class="row g-3 align-items-center my-2">
@@ -97,17 +93,13 @@
 				<input class="form-control" type="password"
 					th:field="${userForm.confirmPassword}">
 			</div>
-			<div class="col-auto alert-danger my-2">
-				<span th:if="${#fields.hasErrors('confirmPassword')}"
-					th:errors="*{confirmPassword}" class="form-text my-2">Name
-					Error</span>
-			</div>
+			<div class="col-auto alert-danger my-2"
+				th:if="${#fields.hasErrors('confirmPassword')}"
+				th:errors="*{confirmPassword}">Name Error</div>
 		</div>
-		
-		<div class="col-auto alert-danger my-2">
-		<span th:if="${formErrorMessage}" th:text="${formErrorMessage}"
-			class="form-text my-2">Mensaje Error</span>
-	</div>
+
+		<div class="col-auto alert-danger my-2" th:if="${formErrorMessage}"
+			th:text="${formErrorMessage}">Mensaje Error</div>
 
 		<div class="form-group">
 			<div class="text-center">
@@ -116,6 +108,6 @@
 			</div>
 		</div>
 	</div>
-	
+
 
 </form>
