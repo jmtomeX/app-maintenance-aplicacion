@@ -8,5 +8,7 @@ public interface UserService {
 	
 	public User createUser(User formUser) throws Exception;
 	
+	public User getUserById(Long id) throws Exception;
+	
 	
 }

@@ -45,4 +45,10 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	@Override
+	public User getUserById(Long id) throws Exception {
+		// si no lo encuentra lanza una excepción.
+	return repository.findById(id).orElseThrow(()-> new Exception("El usuario para editar no existe."));
+	}
+
 }
