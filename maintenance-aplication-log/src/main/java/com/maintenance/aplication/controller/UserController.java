@@ -48,6 +48,7 @@ public class UserController {
 		} else {
 
 			try {
+				
 				userService.createUser(user);
 				model.addAttribute("userForm", new User());
 				model.addAttribute("listTab", "active");
@@ -67,6 +68,7 @@ public class UserController {
 
 	@GetMapping("/editUser/{id}")
 	public String getEditUserForm(Model model, @PathVariable(name = "id") Long id) throws Exception {
+		
 		User userToEdit = userService.getUserById(id);
 		model.addAttribute("userForm", userToEdit);
 		model.addAttribute("userList", userService.getAllUsers());
@@ -75,5 +77,39 @@ public class UserController {
 		model.addAttribute("editMode", "true");
 
 		return "user-form/user-view";
+	}
+	
+	@PostMapping("/editUser")
+	public String editUser(@Valid @ModelAttribute("userForm") User user, BindingResult result, ModelMap model) {
+		if (result.hasErrors()) {
+			model.addAttribute("userForm", user);
+			model.addAttribute("formTab", "active");
+			model.addAttribute("editMode", "true");
+
+		} else {
+
+			try {
+				System.out.println("Controlador id -->" + user.getId());
+				userService.updateUser(user);
+				model.addAttribute("userForm", new User());
+				model.addAttribute("listTab", "active");
+
+			} catch (Exception e) {
+				model.addAttribute("formErrorMessage", e.getMessage());
+				model.addAttribute("userForm", user);
+				model.addAttribute("formTab", "active");
+				model.addAttribute("userList", userService.getAllUsers());
+				model.addAttribute("roles", roleRepository.findAll());
+				// se queda en la misma pantalla si hay un error 
+				model.addAttribute("editMode", "false");
+			}
+		}
+		model.addAttribute("userList", userService.getAllUsers());
+		model.addAttribute("roles", roleRepository.findAll());
+		return "user-form/user-view";
+	}
+	@GetMapping("/userForm/cancel")
+	public String cancelEditUser(ModelMap model) {
+		return "redirect:/userForm";
 	}
 }

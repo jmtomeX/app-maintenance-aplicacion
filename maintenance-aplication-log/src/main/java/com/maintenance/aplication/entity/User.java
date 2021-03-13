@@ -48,12 +48,12 @@ public class User implements Serializable{
 	
 	@Column(unique = true) 
 	@NotBlank 
-	@Size(min=5,max=12, message="No se cumplen las reglas de tamaño.")
+	@Size(min=5,max=20, message="No se cumplen las reglas de tamaño.")
 	private String username;
 	
 	@Column
 	@NotBlank 
-	@Size(min=5, message="El password debe tener como mínimo 5 carácteres.")
+	@Size(min=5,max=20, message="El password debe tener como mínimo 5 carácteres.")
 	private String password;
 	
 	@Transient // para omitir este valor en la base de datos

@@ -4,39 +4,45 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.maintenance.aplication.entity.User;
 import com.maintenance.aplication.respository.UserRepository;
-
 
 @Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository repository;
-	
+
 	@Override
+	@Transactional(readOnly = true)
 	public Iterable<User> getAllUsers() {
 		return repository.findAll();
 	}
-	
+
 	// comprobar si el usuario existe
-	private boolean checkUsernameAvalible(User user) throws Exception{
+	private boolean checkUsernameAvalible(User user) throws Exception {
 		Optional<User> userFound = repository.findByUsername(user.getUsername());
 		if (userFound.isPresent()) {
 			throw new Exception("Username no disponible.");
 		}
 		return true;
 	}
-	
+
 	private boolean checkPasswordValid(User user) throws Exception {
+		if (user.getConfirmPassword() == null || user.getConfirmPassword().isEmpty()) {
+			throw new Exception("Confirm password es obligatorio");
+		}
+
 		if (!user.getPassword().equals(user.getConfirmPassword())) {
 			throw new Exception("Las contraseñas no coinciden.");
 		}
 		return true;
 	}
-	
+
 	@Override
+	@Transactional
 	public User createUser(User user) throws Exception {
 		if (checkPasswordValid(user) && checkUsernameAvalible(user)) {
 			user = repository.save(user);
@@ -46,9 +52,30 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public User getUserById(Long id) throws Exception {
 		// si no lo encuentra lanza una excepción.
-	return repository.findById(id).orElseThrow(()-> new Exception("El usuario para editar no existe."));
+		User user = repository.findById(id).orElseThrow(() -> new Exception("El usuario para editar no existe."));
+		return user;
 	}
 
+	// recibe un usuario y se lo pasa a toUser mapeado con el método mapUser
+	@Override
+	@Transactional
+	public User updateUser(User fromUser) throws Exception {
+		// se consulta en la bbdd porque hay que comparar si es nuevo o no, ya que el método save puede crear o actualizar
+		User toUser = getUserById(fromUser.getId());
+
+		mapUser(fromUser, toUser);
+		return repository.save(toUser);
+
+	}
+
+	protected void mapUser(User from, User to) {
+		to.setUsername(from.getUsername());
+		to.setFirstName(from.getFirstName());
+		to.setLastName(from.getLastName());
+		to.setEmail(from.getEmail());
+		to.setRoles(from.getRoles());
+	}
 }

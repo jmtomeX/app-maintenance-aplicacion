@@ -1,5 +1,21 @@
 <form class="form-horizontal" role="form" autocomplete="off"
-	th:object="${userForm}" th:action="${editMode} ? @{/editUser}: @{/userForm}" method="post">
+	th:object="${userForm}"
+	th:action="${editMode} ? @{/editUser}: @{/userForm}" method="post">
+
+
+	<input class="form-control" type=hidden name="password" value="xxxxx"
+		th:if="${editMode}">
+
+	<!--Es necesario para poder pasar la validacion del Model ya que no pueden estar en blanco y se ocultan al editar-->
+	<input class="form-control" type=hidden
+		name="confirmPassword" value="xxxxx" th:if="${editMode}"> 
+		
+		<input
+		class="form-control" type=hidden th:field="${userForm.id}"
+		th:if="${editMode}">
+
+
+
 
 	<div class="card-body light col-md-12">
 		<div class="row g-3 align-items-center my-4">
@@ -72,39 +88,40 @@
 				Error</div>
 		</div>
 
-		<div class="row g-3 align-items-center my-2">
+		<div class="row g-3 align-items-center my-2"
+			th:if="${editMode==null or editMode==false}">
 			<div class="col-sm-2">
 				<label class="col-form-label">Password</label>
 			</div>
-			<div class="col-sm-10">
+			<div class="col-sm-4">
 				<input class="form-control" type="password"
-					th:field="${userForm.password}">
+					th:field="${userForm.password}" name="confirmPassword">
 			</div>
 			<div class="col-auto alert-danger my-2"
 				th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name
 				Error</div>
-		</div>
-
-		<div class="row g-3 align-items-center my-2">
 			<div class="col-sm-2">
-				<label class="col-form-label">Password</label>
+				<label class="col-form-label">Confirmar Password</label>
 			</div>
-			<div class="col-sm-10">
+			<div class="col-sm-4">
 				<input class="form-control" type="password"
-					th:field="${userForm.confirmPassword}">
+					th:field="${userForm.confirmPassword}" name="confirmPassword">
 			</div>
 			<div class="col-auto alert-danger my-2"
 				th:if="${#fields.hasErrors('confirmPassword')}"
 				th:errors="*{confirmPassword}">Name Error</div>
 		</div>
 
+
 		<div class="col-auto alert-danger my-2" th:if="${formErrorMessage}"
 			th:text="${formErrorMessage}">Mensaje Error</div>
 
 		<div class="form-group">
 			<div class="text-center">
-				<input type="reset" class="btn btn-secondary my-3" value="Cancelar">
-				<input type="submit" class="btn btn-primary my-3" th:value="${editMode}?'Guardar usuario':'Crear usuario'">
+				<a th:href="@{'/userForm/cancel'}" class="btn btn-secondary my-3">Cancelar</a>
+				<input type="submit" class="btn btn-primary my-3"
+					value="Guardar cambios"
+					th:value="${editMode} ? 'Modificar usuario':'Crear usuario'">
 			</div>
 		</div>
 	</div>

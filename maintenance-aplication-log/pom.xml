@@ -13,7 +13,7 @@
 	<artifactId>maintenance-aplication-log</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>maintenance-aplication-log</name>
-	<description>Aplicación que gesitona mantenimientos</description>
+	<description>Aplicación que gestiona mantenimientos</description>
 	<properties>
 		<java.version>15</java.version>
 	</properties>
