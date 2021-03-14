@@ -118,7 +118,7 @@ public class UserController {
 		} catch(Exception e) {
 			model.addAttribute("listErrorMessage",e.getMessage());
 		}
-		// en vez de redirigir manda el nombre del modelo mostrando lo que tiene userForm
-		return userForm(model);
+		
+		return "redirect:/userForm";
 	}
 }
