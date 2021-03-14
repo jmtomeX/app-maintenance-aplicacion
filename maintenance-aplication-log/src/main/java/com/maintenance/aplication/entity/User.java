@@ -56,8 +56,8 @@ public class User implements Serializable{
 	@Size(min=5,max=20, message="El password debe tener como mínimo 5 carácteres.")
 	private String password;
 	
+	// @NotBlank 
 	@Transient // para omitir este valor en la base de datos
-	@NotBlank 
 	private String confirmPassword;
 	
 	@ManyToMany(fetch = FetchType.LAZY)

@@ -6,9 +6,9 @@
 	<input class="form-control" type=hidden name="password" value="xxxxx"
 		th:if="${editMode}">
 
-	<!--Es necesario para poder pasar la validacion del Model ya que no pueden estar en blanco y se ocultan al editar-->
+	<!--Es necesario para poder pasar la validacion del Model ya que no pueden estar en blanco y se ocultan al editar
 	<input class="form-control" type=hidden
-		name="confirmPassword" value="xxxxx" th:if="${editMode}"> 
+		name="confirmPassword" value="xxxxx" th:if="${editMode}"> -->
 		
 		<input
 		class="form-control" type=hidden th:field="${userForm.id}"
@@ -73,8 +73,9 @@
 				th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name
 				Error</div>
 		</div>
+		
 		<div class="row g-3 align-items-center my-2">
-			<div class="col-sm-6">
+			<div class="col-sm-2">
 				<label class="col-form-label">Roles</label>
 			</div>
 			<div class="col-sm-6">
@@ -86,6 +87,7 @@
 			<div class="col-auto alert-danger my-2"
 				th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Name
 				Error</div>
+				<div class="col-sm-3"></div>
 		</div>
 
 		<div class="row g-3 align-items-center my-2"

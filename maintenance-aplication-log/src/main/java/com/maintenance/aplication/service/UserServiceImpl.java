@@ -61,11 +61,10 @@ public class UserServiceImpl implements UserService {
 
 	// recibe un usuario y se lo pasa a toUser mapeado con el método mapUser
 	@Override
-	@Transactional
+	//@Transactional(readOnly = true)
 	public User updateUser(User fromUser) throws Exception {
 		// se consulta en la bbdd porque hay que comparar si es nuevo o no, ya que el método save puede crear o actualizar
 		User toUser = getUserById(fromUser.getId());
-
 		mapUser(fromUser, toUser);
 		return repository.save(toUser);
 

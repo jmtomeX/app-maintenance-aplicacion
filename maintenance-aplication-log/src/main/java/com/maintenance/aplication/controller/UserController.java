@@ -40,7 +40,7 @@ public class UserController {
 	}
 
 	@PostMapping("/userForm")
-	public String createUser(@Valid @ModelAttribute("userForm") User user, BindingResult result, ModelMap model) {
+	public String createUser(@Valid @ModelAttribute("userForm") User user, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			model.addAttribute("userForm", user);
 			model.addAttribute("formTab", "active");
@@ -80,7 +80,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/editUser")
-	public String editUser(@Valid @ModelAttribute("userForm") User user, BindingResult result, ModelMap model) {
+	public String editUser(@Valid @ModelAttribute("userForm") User user, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			model.addAttribute("userForm", user);
 			model.addAttribute("formTab", "active");
@@ -89,7 +89,6 @@ public class UserController {
 		} else {
 
 			try {
-				System.out.println("Controlador id -->" + user.getId());
 				userService.updateUser(user);
 				model.addAttribute("userForm", new User());
 				model.addAttribute("listTab", "active");
