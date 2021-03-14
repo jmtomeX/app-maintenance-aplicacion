@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = true)
 	public User getUserById(Long id) throws Exception {
 		// si no lo encuentra lanza una excepción.
-		User user = repository.findById(id).orElseThrow(() -> new Exception("El usuario para editar no existe."));
+		User user = repository.findById(id).orElseThrow(() -> new Exception("El usuario no existe."));
 		return user;
 	}
 
@@ -76,5 +76,12 @@ public class UserServiceImpl implements UserService {
 		to.setLastName(from.getLastName());
 		to.setEmail(from.getEmail());
 		to.setRoles(from.getRoles());
+	}
+
+	@Override
+	public void deleteUser(Long id ) throws Exception {
+		User user = getUserById(id);
+		repository.delete(user);
+	
 	}
 }

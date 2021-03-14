@@ -111,4 +111,14 @@ public class UserController {
 	public String cancelEditUser(ModelMap model) {
 		return "redirect:/userForm";
 	}
+	@GetMapping("/deleteUser/{id}")
+	public String deleteUSer(Model model, @PathVariable(name="id") Long id ) {
+		try {
+			userService.deleteUser(id);
+		} catch(Exception e) {
+			model.addAttribute("listErrorMessage",e.getMessage());
+		}
+		// en vez de redirigir manda el nombre del modelo mostrando lo que tiene userForm
+		return userForm(model);
+	}
 }
