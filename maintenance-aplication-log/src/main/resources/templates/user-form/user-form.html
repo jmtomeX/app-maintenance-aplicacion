@@ -9,9 +9,8 @@
 	<!--Es necesario para poder pasar la validacion del Model ya que no pueden estar en blanco y se ocultan al editar
 	<input class="form-control" type=hidden
 		name="confirmPassword" value="xxxxx" th:if="${editMode}"> -->
-		
-		<input
-		class="form-control" type=hidden th:field="${userForm.id}"
+
+	<input class="form-control" type=hidden th:field="${userForm.id}"
 		th:if="${editMode}">
 
 
@@ -73,7 +72,7 @@
 				th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name
 				Error</div>
 		</div>
-		
+
 		<div class="row g-3 align-items-center my-2">
 			<div class="col-sm-2">
 				<label class="col-form-label">Roles</label>
@@ -87,7 +86,7 @@
 			<div class="col-auto alert-danger my-2"
 				th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Name
 				Error</div>
-				<div class="col-sm-3"></div>
+			<div class="col-sm-3"></div>
 		</div>
 
 		<div class="row g-3 align-items-center my-2"
@@ -114,15 +113,13 @@
 				th:errors="*{confirmPassword}">Name Error</div>
 		</div>
 
-
-		<div class="col-auto alert-danger my-2" th:if="${formErrorMessage}"
-			th:text="${formErrorMessage}">Mensaje Error</div>
-
 		<div class="form-group">
 			<div class="text-center">
 				<a th:href="@{'/userForm/cancel'}" class="btn btn-secondary my-3">Cancelar</a>
 				<!-- data-target hace referencia al modal -->
-				<button type="button" class="btn btn-secondary" data-toggle="modal" th:if="${editMode}" data-target="#changePasswordModal">Cambiar Password</button>
+				<button type="button" class="btn btn-secondary" data-toggle="modal"
+					th:if="${editMode}" data-target="#changePasswordModal">Cambiar
+					Password</button>
 				<input type="submit" class="btn btn-primary my-3"
 					value="Guardar cambios"
 					th:value="${editMode} ? 'Modificar usuario':'Crear usuario'">
@@ -130,6 +127,8 @@
 			</div>
 		</div>
 	</div>
-	<!-- minuto 4:30 -->
-
+	<div class="alert alert-danger text-center" th:if="${formErrorMessage}"
+		th:text="${formErrorMessage}">Error MEssage</div>
+	<div class="alert alert-success text-center d-none" id="formSuccess"
+		th:if="${editMode}">Success MEssage</div>
 </form>
