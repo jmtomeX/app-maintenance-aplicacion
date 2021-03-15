@@ -17,7 +17,7 @@ public class ChangePasswordForm {
 	@NotBlank(message="La nueva contraseña no puede estar en blanco.\n")
 	private String confirmPassword;
 
-
+	// constructores
 	public  ChangePasswordForm(Long id) {
 		this.id = id;
 	}
@@ -25,6 +25,7 @@ public class ChangePasswordForm {
 		
 	}
 	
+	// getters and setters
 	public Long getId() {
 		return id;
 	}
