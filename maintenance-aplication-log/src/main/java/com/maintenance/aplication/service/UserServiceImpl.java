@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.maintenance.aplication.dto.ChangePasswordForm;
 import com.maintenance.aplication.entity.User;
 import com.maintenance.aplication.respository.UserRepository;
 
@@ -61,7 +62,6 @@ public class UserServiceImpl implements UserService {
 
 	// recibe un usuario y se lo pasa a toUser mapeado con el método mapUser
 	@Override
-	//@Transactional(readOnly = true)
 	public User updateUser(User fromUser) throws Exception {
 		// se consulta en la bbdd porque hay que comparar si es nuevo o no, ya que el método save puede crear o actualizar
 		User toUser = getUserById(fromUser.getId());
@@ -83,5 +83,29 @@ public class UserServiceImpl implements UserService {
 		User user = getUserById(id);
 		repository.delete(user);
 	
+	}
+
+	@Override
+	public User changePassword(ChangePasswordForm form) throws Exception {
+		// recoger el id del usr que ya está guardado en el formulario
+		User user = getUserById(form.getId());
+		
+		// verificar el password con el de la bbdd
+		if (!user.getPassword().equals(form.getCurrentPassword())) {
+			throw new Exception("Password actual incorrecto.");
+		} 
+		
+		// verificar si es distinto al viejo
+		if (user.getPassword().equals(form.getNewPassword())) {
+			throw new Exception("El password tiene que ser distinto al actual.");
+		} 
+		
+		// verificar el passw con el confirm
+		if (user.getPassword().equals(form.getConfirmPassword())) {
+			throw new Exception("Los password deben de ser iguales.");
+		} 
+		// si todo ha ido bien le mandamos el nuevo password
+		user.setPassword(form.getNewPassword());
+		return repository.save(user);
 	}
 }
