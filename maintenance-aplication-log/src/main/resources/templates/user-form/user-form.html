@@ -79,7 +79,7 @@
 				<label class="col-form-label">Roles</label>
 			</div>
 			<div class="col-sm-6">
-				<select class="form-control" size="3" th:field="${userForm.roles}">
+				<select class="form-control" size="1" th:field="${userForm.roles}">
 					<option th:each="role :${roles}" th:value="${role.id}"
 						th:text="${role.name}"></option>
 				</select>
@@ -121,9 +121,12 @@
 		<div class="form-group">
 			<div class="text-center">
 				<a th:href="@{'/userForm/cancel'}" class="btn btn-secondary my-3">Cancelar</a>
+				<!-- data-target hace referencia al modal -->
+				<button type="button" class="btn btn-secondary" data-toggle="modal" th:if="${editMode}" data-target="#changePasswordModal">Cambiar Password</button>
 				<input type="submit" class="btn btn-primary my-3"
 					value="Guardar cambios"
 					th:value="${editMode} ? 'Modificar usuario':'Crear usuario'">
+
 			</div>
 		</div>
 	</div>
