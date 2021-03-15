@@ -8,13 +8,13 @@ public class ChangePasswordForm {
 	private Long id;
 	
 	@NotBlank
-	(message="La contraseña actual no debe estar en blanco.")
+	(message="La contraseña actual no debe estar en blanco.\n")
 	private String currentPassword;
 
-	@NotBlank(message="La nueva contraseña no puede estar en blanco")
+	@NotBlank(message="La nueva contraseña no puede estar en blanco.\n")
 	private String newPassword;
 
-	@NotBlank(message="La nueva contraseña no puede estar en blanco")
+	@NotBlank(message="La nueva contraseña no puede estar en blanco.\n")
 	private String confirmPassword;
 
 
