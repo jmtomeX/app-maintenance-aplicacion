@@ -31,7 +31,7 @@ public class UserController {
 	@Autowired // solo es para mostrar datos no se crea, ni modifica por lo que no se usa una capa intermedia
 	RoleRepository roleRepository;
 
-	@GetMapping("/")
+	@GetMapping({"/","/login"})
 	public String index() {
 		return "index";
 	}

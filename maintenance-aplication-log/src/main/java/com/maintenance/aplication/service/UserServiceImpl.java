@@ -79,33 +79,69 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deleteUser(Long id ) throws Exception {
+	public void deleteUser(Long id) throws Exception {
 		User user = getUserById(id);
 		repository.delete(user);
-	
+
 	}
 
 	@Override
 	public User changePassword(ChangePasswordForm form) throws Exception {
 		// recoger el id del usr que ya está guardado en el formulario
 		User user = getUserById(form.getId());
-		
+
 		// verificar el password con el de la bbdd
 		if (!user.getPassword().equals(form.getCurrentPassword())) {
 			throw new Exception("Password actual incorrecto.");
-		} 
-		
+		}
+
 		// verificar si es distinto al viejo
 		if (user.getPassword().equals(form.getNewPassword())) {
 			throw new Exception("El password tiene que ser distinto al actual.");
-		} 
-		
+		}
+
 		// verificar el passw con el confirm
 		if (user.getPassword().equals(form.getConfirmPassword())) {
 			throw new Exception("Los password deben de ser iguales.");
-		} 
+		}
 		// si todo ha ido bien le mandamos el nuevo password
 		user.setPassword(form.getNewPassword());
 		return repository.save(user);
 	}
 }
+/*
+ * Al momento de crear contraseñas nosotros ya las mandamos encriptadas, 
+ * por tanto cuando tratas de comparar las mismas debemos verificar no con equals sino con matches
+ * @Service public class UsuarioServiceImpl implements UsuarioService { *
+ * 
+ * @Autowired
+ *
+ * UsuarioRepository usuarioRepository;
+ * 
+ * @Autowired 
+ * BCryptPasswordEncoder bCryptPasswordEncoder;
+ * 
+ * @Autowired 
+ * PasswordEncoder passwordEncoder;
+ * 
+ * @Override
+ * 
+ * public Usuario createUser(Usuario user) throws Exception { BCryptPasswordEncoder bCryptPasswordEncoder = new
+ * BCryptPasswordEncoder(4); if (checkUsernameAvailable(user) && checkPasswordValid(user) && checkEmailAvailable(user))
+ * { //modificar el password para que sea seguro user.setContrasena(bCryptPasswordEncoder.encode(user.getContrasena()));
+ * //modificar el password para que sea seguro user = usuarioRepository.save(user); } return user }
+ * 
+ * 
+ * @Override public Usuario changePassword(ChangePasswordForm form) throws Exception {
+ *  Usuario user =  getUserById(form.getId());
+ * 
+ * //encoder.matches("123456", passwd) if ( !isLoggedUserADMIN() && ! passwordEncoder.matches(form.getCurrentPassword(),
+ * user.getContrasena())) { throw new Exception ("Current Password invalido."); }
+ * if(passwordEncoder.matches(form.getNewPassword(), user.getContrasena())) { throw new Exception
+ * ("Nuevo debe ser diferente al password actual."); } if( !form.getNewPassword().equals(form.getConfirmPassword())) {
+ * 
+ * throw new Exception ("Nuevo Password y Confirm Password no coinciden."); }
+ * 
+ * String encodePassword = bCryptPasswordEncoder.encode(form.getNewPassword()); user.setContrasena(encodePassword);
+ * return usuarioRepository.save(user); }
+ */
