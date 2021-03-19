@@ -53,28 +53,27 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public User createUser(User user) throws Exception {
 		if (checkPasswordValid(user) && checkUsernameAvalible(user)) {
+			// codifica el password
+			String encodePassword = bCryptPasswordEncoder.encode(user.getPassword());
+			// si todo ha ido bien le mandamos el nuevo password
+			user.setPassword(encodePassword);
+
 			user = repository.save(user);
 			System.out.print(user);
 		}
 		return user;
 	}
-		
+
 	/*
-	 	@Override
-	@Transactional
-	public User createUser(User user) throws Exception {
-		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(4);
-		if (checkUsernameAvalible(user) && checkPasswordValid(user) && checkEmailAvailable(user)) { 
-			// modificar el password para que sea seguro
-			user.setPassword(password);
-			(bCryptPasswordEncoder.encode(user.getPassword()));
-			// modificar el password para que sea seguro
-			user = repository.save(user);
-		}
-		return user;
-	}
-	 * */
-	
+	 * @Override
+	 * 
+	 * @Transactional public User createUser(User user) throws Exception { BCryptPasswordEncoder bCryptPasswordEncoder = new
+	 * BCryptPasswordEncoder(4); if (checkUsernameAvalible(user) && checkPasswordValid(user) && checkEmailAvailable(user)) {
+	 * // modificar el password para que sea seguro user.setPassword(password);
+	 * (bCryptPasswordEncoder.encode(user.getPassword())); // modificar el password para que sea seguro user =
+	 * repository.save(user); } return user; }
+	 */
+
 	@Override
 	@Transactional(readOnly = true)
 	public User getUserById(Long id) throws Exception {
@@ -103,7 +102,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	// al hacer peticiones REST que el usuario tenga el role de ADMIN
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')") 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')") // puede tener varios roles separados por comas
 	public void deleteUser(Long id) throws Exception {
 		User user = getUserById(id);
 		repository.delete(user);
@@ -131,65 +130,62 @@ public class UserServiceImpl implements UserService {
 		}
 		// codifica el password
 		String encodePassword = bCryptPasswordEncoder.encode(form.getNewPassword());
-		
+
 		// si todo ha ido bien le mandamos el nuevo password
 		user.setPassword(encodePassword);
 		System.out.println(encodePassword);
 
 		return repository.save(user);
 	}
-	
+
 	// Comprobar si el usuario en sesión es ADMIN
 	// Obteniendo el objeto del usuario en sesión
 	public boolean loggedUserHasADMIN() {
 		// recoger usuario autentificado
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails loggedUser = null;
-		Object roles = null; 
+		Object roles = null;
 		// si es una instancia de userDet hacemos cast
 		if (principal instanceof UserDetails) {
 			loggedUser = (UserDetails) principal;
-		
+
 			roles = loggedUser.getAuthorities().stream()
 					// si hay alguna autoridad que diga ADMIN
-					.filter(x -> "ROLE_ADMIN".equals(x.getAuthority() ))      
-					.findFirst()
-					.orElse(null); // si no devuelve --> loggedUser = null;
+					.filter(x -> "ROLE_ADMIN".equals(x.getAuthority())).findFirst().orElse(null); // si no devuelve --> loggedUser = null;
 		}
-		return roles != null ?true :false;
+		return roles != null ? true : false;
 	}
-	
+
 	// Obtener el usuario logeado
 	private User getLoggedUser() throws Exception {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		
+
 		UserDetails loggedUser = null;
 
-		//Verificar que ese objeto traido de sesion es el usuario
+		// Verificar que ese objeto traido de sesion es el usuario
 		if (principal instanceof UserDetails) {
 			loggedUser = (UserDetails) principal;
 		}
-		
-		User myUser = repository
-				.findByUsername(loggedUser.getUsername()).orElseThrow(() -> new Exception("Error obteniendo el usuario logeado desde la sesion."));
-		
+
+		User myUser = repository.findByUsername(loggedUser.getUsername())
+				.orElseThrow(() -> new Exception("Error obteniendo el usuario logeado desde la sesion."));
+
 		return myUser;
 	}
 }
 /*
- * Al momento de crear contraseñas nosotros ya las mandamos encriptadas, 
- * por tanto cuando tratas de comparar las mismas debemos verificar no con equals sino con matches
+ * Al momento de crear contraseñas nosotros ya las mandamos encriptadas, por tanto cuando tratas de comparar las mismas
+ * debemos verificar no con equals sino con matches
+ * 
  * @Service public class UsuarioServiceImpl implements UsuarioService { *
  * 
  * @Autowired
  *
  * UsuarioRepository usuarioRepository;
  * 
- * @Autowired 
- * BCryptPasswordEncoder bCryptPasswordEncoder;
+ * @Autowired BCryptPasswordEncoder bCryptPasswordEncoder;
  * 
- * @Autowired 
- * PasswordEncoder passwordEncoder;
+ * @Autowired PasswordEncoder passwordEncoder;
  * 
  * @Override
  * 
@@ -199,8 +195,8 @@ public class UserServiceImpl implements UserService {
  * //modificar el password para que sea seguro user = usuarioRepository.save(user); } return user }
  * 
  * 
- * @Override public Usuario changePassword(ChangePasswordForm form) throws Exception {
- *  Usuario user =  getUserById(form.getId());
+ * @Override public Usuario changePassword(ChangePasswordForm form) throws Exception { Usuario user =
+ * getUserById(form.getId());
  * 
  * //encoder.matches("123456", passwd) if ( !isLoggedUserADMIN() && ! passwordEncoder.matches(form.getCurrentPassword(),
  * user.getContrasena())) { throw new Exception ("Current Password invalido."); }
