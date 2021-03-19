@@ -53,7 +53,7 @@ public class User implements Serializable{
 	
 	@Column
 	@NotBlank 
-	@Size(min=5,max=20, message="El password debe tener como mínimo 5 carácteres.")
+	@Size(min=5,max=100, message="El password debe tener como mínimo 5 carácteres.")
 	private String password;
 	
 	// @NotBlank 
