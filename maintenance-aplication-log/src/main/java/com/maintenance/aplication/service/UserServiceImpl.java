@@ -3,6 +3,7 @@ package com.maintenance.aplication.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -101,6 +102,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	// al hacer peticiones REST que el usuario tenga el role de ADMIN
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')") 
 	public void deleteUser(Long id) throws Exception {
 		User user = getUserById(id);
 		repository.delete(user);
