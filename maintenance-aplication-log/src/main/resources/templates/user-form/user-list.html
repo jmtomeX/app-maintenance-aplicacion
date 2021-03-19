@@ -19,10 +19,21 @@
 				<td th:text="${user.lastName}"></td>
 				<td th:text="${user.username}"></td>
 				<td th:text="${user.email}"></td>
-				<td><a href="#" th:href="@{'/editUser/'+ ${user.id}}"><i
-						class="fas fa-edit"></i></a> <a href="#" class="text-danger"
+				<td>
+		
+					<!-- Comprobar si eres el usuario conectado o el admin para poder modificarte -->
+					<span
+					th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')} or (${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#httpServletRequest.remoteUser==user.username})">
+						<a href="#" th:href="@{'/editUser/'+ ${user.id}}"><i
+							class="fas fa-edit"></i></a>
+				</span>
+				<!-- Solo el admin puede borrar usuarios -->
+				<span th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" >
+				<a href="#" class="text-danger"
 					th:onclick="'javascript:confirmDelete(\''+ ${user.id} +'\');'"><i
-						class="fas fa-user-times"></i></a></td>
+						class="fas fa-user-times"></i></a>
+						</span>
+				</td>
 			</tr>
 		</tbody>
 	</table>
