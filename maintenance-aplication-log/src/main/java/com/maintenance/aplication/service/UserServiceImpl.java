@@ -131,6 +131,8 @@ public class UserServiceImpl implements UserService {
 		
 		// si todo ha ido bien le mandamos el nuevo password
 		user.setPassword(encodePassword);
+		System.out.println(encodePassword);
+
 		return repository.save(user);
 	}
 	
@@ -147,10 +149,28 @@ public class UserServiceImpl implements UserService {
 		
 			roles = loggedUser.getAuthorities().stream()
 					// si hay alguna autoridad que diga ADMIN
-					.filter(x -> "ADMIN".equals(x.getAuthority() ))      
-					.findFirst().orElse(null); // si no devuelve --> loggedUser = null;
+					.filter(x -> "ROLE_ADMIN".equals(x.getAuthority() ))      
+					.findFirst()
+					.orElse(null); // si no devuelve --> loggedUser = null;
 		}
 		return roles != null ?true :false;
+	}
+	
+	// Obtener el usuario logeado
+	private User getLoggedUser() throws Exception {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		UserDetails loggedUser = null;
+
+		//Verificar que ese objeto traido de sesion es el usuario
+		if (principal instanceof UserDetails) {
+			loggedUser = (UserDetails) principal;
+		}
+		
+		User myUser = repository
+				.findByUsername(loggedUser.getUsername()).orElseThrow(() -> new Exception("Error obteniendo el usuario logeado desde la sesion."));
+		
+		return myUser;
 	}
 }
 /*
