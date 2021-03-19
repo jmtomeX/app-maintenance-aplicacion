@@ -3,6 +3,9 @@ package com.maintenance.aplication.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +15,9 @@ import com.maintenance.aplication.respository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
+	// codificación de password
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Autowired
 	UserRepository repository;
@@ -51,7 +57,23 @@ public class UserServiceImpl implements UserService {
 		}
 		return user;
 	}
-
+		
+	/*
+	 	@Override
+	@Transactional
+	public User createUser(User user) throws Exception {
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(4);
+		if (checkUsernameAvalible(user) && checkPasswordValid(user) && checkEmailAvailable(user)) { 
+			// modificar el password para que sea seguro
+			user.setPassword(password);
+			(bCryptPasswordEncoder.encode(user.getPassword()));
+			// modificar el password para que sea seguro
+			user = repository.save(user);
+		}
+		return user;
+	}
+	 * */
+	
 	@Override
 	@Transactional(readOnly = true)
 	public User getUserById(Long id) throws Exception {
@@ -90,8 +112,8 @@ public class UserServiceImpl implements UserService {
 		// recoger el id del usr que ya está guardado en el formulario
 		User user = getUserById(form.getId());
 
-		// verificar el password con el de la bbdd
-		if (!user.getPassword().equals(form.getCurrentPassword())) {
+		// verificar el password con él de la bbdd y comprobar si es admin o no
+		if (!loggedUserHasADMIN() && !user.getPassword().equals(form.getCurrentPassword())) {
 			throw new Exception("Password actual incorrecto.");
 		}
 
@@ -104,9 +126,31 @@ public class UserServiceImpl implements UserService {
 		if (user.getPassword().equals(form.getConfirmPassword())) {
 			throw new Exception("Los password deben de ser iguales.");
 		}
+		// codifica el password
+		String encodePassword = bCryptPasswordEncoder.encode(form.getNewPassword());
+		
 		// si todo ha ido bien le mandamos el nuevo password
-		user.setPassword(form.getNewPassword());
+		user.setPassword(encodePassword);
 		return repository.save(user);
+	}
+	
+	// Comprobar si el usuario en sesión es ADMIN
+	// Obteniendo el objeto del usuario en sesión
+	public boolean loggedUserHasADMIN() {
+		// recoger usuario autentificado
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails loggedUser = null;
+		Object roles = null; 
+		// si es una instancia de userDet hacemos cast
+		if (principal instanceof UserDetails) {
+			loggedUser = (UserDetails) principal;
+		
+			roles = loggedUser.getAuthorities().stream()
+					// si hay alguna autoridad que diga ADMIN
+					.filter(x -> "ADMIN".equals(x.getAuthority() ))      
+					.findFirst().orElse(null); // si no devuelve --> loggedUser = null;
+		}
+		return roles != null ?true :false;
 	}
 }
 /*
