@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- FRAMEWORK BOOTSTRAP para el estilo de la pagina-->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="static/css/index.css"
+	th:href="@{/css/index.css}">
+
+<style type="text/css">
+body {
+	padding-top: 5%;
+}
+
+img {
+	width: 100%;
+}
+</style>
+</head>
+<body>
+<head>
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+<!-- Nuestro css-->
+<link rel="stylesheet" type="text/css" href="static/css/index.css"
+	th:href="@{/css/index.css}">
+
+<style type="text/css">
+body {
+	padding-top: 5%;
+}
+
+img {
+	width: 100%;
+}
+</style>
+</head>
+<body>
+	<div class="container text-center">
+		<div class="mx-auto col-10 card">
+			<div class="card-header">
+				<h4>
+					<span th:text="${error}"> </span> -  <span th:text="${status}"> </span>
+				</h4>
+			</div>
+			<div class="card-body">
+				<a href="/userForm"><img src="static/images/error/404.png"
+					th:src="@{/images/error/404.png}" /></a>
+				<p>
+					FUENTE: <b>https://www.computersrepaired.com.au/images/404-page-technogeek.png</b>
+				</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

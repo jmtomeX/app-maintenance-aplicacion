@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="static/css/index.css"
+	th:href="@{/css/index.css}">
+
+<style type="text/css">
+body {
+	padding-top: 5%;
+}
+
+img {
+	width: 75%;
+}
+</style>
+</head>
+<body>
+	<div class="container text-center">
+		<div class="mx-auto col-10 card">
+			<div class="card-header">
+				<h4 th:text="${error}">Internal Server Error</h4>
+			</div>
+			<div class="card-body">
+				<a href="/userForm"><img src="static/images/error/500.png"
+					th:src="@{/images/error/500.png}" /></a>
+			</div>
+			<div class="card-footer">
+				<span th:text="${message}">Message</span><br /> <span
+					th:text="${exception}">Trace </span><br />
+			</div>
+		</div>
+	</div>
+</body>
+</html>
