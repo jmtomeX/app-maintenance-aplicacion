@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.maintenance.aplication.Exception.UsernameOrIdNotFound;
 import com.maintenance.aplication.dto.ChangePasswordForm;
 import com.maintenance.aplication.entity.User;
 import com.maintenance.aplication.respository.UserRepository;
@@ -64,21 +66,12 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
-	/*
-	 * @Override
-	 * 
-	 * @Transactional public User createUser(User user) throws Exception { BCryptPasswordEncoder bCryptPasswordEncoder = new
-	 * BCryptPasswordEncoder(4); if (checkUsernameAvalible(user) && checkPasswordValid(user) && checkEmailAvailable(user)) {
-	 * // modificar el password para que sea seguro user.setPassword(password);
-	 * (bCryptPasswordEncoder.encode(user.getPassword())); // modificar el password para que sea seguro user =
-	 * repository.save(user); } return user; }
-	 */
 
 	@Override
 	@Transactional(readOnly = true)
-	public User getUserById(Long id) throws Exception {
+	public User getUserById(Long id) throws UsernameOrIdNotFound {
 		// si no lo encuentra lanza una excepción.
-		User user = repository.findById(id).orElseThrow(() -> new Exception("El usuario no existe."));
+		User user = repository.findById(id).orElseThrow(() -> new UsernameNotFoundException("El id del usuario no existe."));
 		return user;
 	}
 
@@ -103,7 +96,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	// al hacer peticiones REST que el usuario tenga el role de ADMIN
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')") // puede tener varios roles separados por comas
-	public void deleteUser(Long id) throws Exception {
+	public void deleteUser(Long id) throws UsernameOrIdNotFound {
 		User user = getUserById(id);
 		repository.delete(user);
 
@@ -173,38 +166,3 @@ public class UserServiceImpl implements UserService {
 		return myUser;
 	}
 }
-/*
- * Al momento de crear contraseñas nosotros ya las mandamos encriptadas, por tanto cuando tratas de comparar las mismas
- * debemos verificar no con equals sino con matches
- * 
- * @Service public class UsuarioServiceImpl implements UsuarioService { *
- * 
- * @Autowired
- *
- * UsuarioRepository usuarioRepository;
- * 
- * @Autowired BCryptPasswordEncoder bCryptPasswordEncoder;
- * 
- * @Autowired PasswordEncoder passwordEncoder;
- * 
- * @Override
- * 
- * public Usuario createUser(Usuario user) throws Exception { BCryptPasswordEncoder bCryptPasswordEncoder = new
- * BCryptPasswordEncoder(4); if (checkUsernameAvailable(user) && checkPasswordValid(user) && checkEmailAvailable(user))
- * { //modificar el password para que sea seguro user.setContrasena(bCryptPasswordEncoder.encode(user.getContrasena()));
- * //modificar el password para que sea seguro user = usuarioRepository.save(user); } return user }
- * 
- * 
- * @Override public Usuario changePassword(ChangePasswordForm form) throws Exception { Usuario user =
- * getUserById(form.getId());
- * 
- * //encoder.matches("123456", passwd) if ( !isLoggedUserADMIN() && ! passwordEncoder.matches(form.getCurrentPassword(),
- * user.getContrasena())) { throw new Exception ("Current Password invalido."); }
- * if(passwordEncoder.matches(form.getNewPassword(), user.getContrasena())) { throw new Exception
- * ("Nuevo debe ser diferente al password actual."); } if( !form.getNewPassword().equals(form.getConfirmPassword())) {
- * 
- * throw new Exception ("Nuevo Password y Confirm Password no coinciden."); }
- * 
- * String encodePassword = bCryptPasswordEncoder.encode(form.getNewPassword()); user.setContrasena(encodePassword);
- * return usuarioRepository.save(user); }
- */
