@@ -39,9 +39,10 @@
 		<h1 class="tittle my-5">
 			Maintenance <span class="text-danger">Bike</span>
 		</h1>
+		<h4  th:text="'Usuario conectado ' + ${userLogged.username}"></h4>
 		<div class="mx-auto col-sm-10 main-section mb-5" id="myTab"
 			role="tablist">
-			<ul class="nav nav-tabs justify-content-end">
+			<ul class="nav nav-tabs justify-content-end">		
 				<li class="nav-item"><a class="nav-link"
 					th:classappend="${listTab}" id="list-tab" data-toggle="tab"
 					href="#list" role="tab" aria-controls="list" aria-selected="false">Lista
