@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.maintenance.aplication.Exception.CustomFieldValidationException;
 import com.maintenance.aplication.Exception.UsernameOrIdNotFound;
 import com.maintenance.aplication.dto.ChangePasswordForm;
 import com.maintenance.aplication.entity.User;
@@ -35,18 +36,18 @@ public class UserServiceImpl implements UserService {
 	private boolean checkUsernameAvalible(User user) throws Exception {
 		Optional<User> userFound = repository.findByUsername(user.getUsername());
 		if (userFound.isPresent()) {
-			throw new Exception("Username no disponible.");
+			throw new CustomFieldValidationException("Username no disponible.", "username");
 		}
 		return true;
 	}
 
 	private boolean checkPasswordValid(User user) throws Exception {
 		if (user.getConfirmPassword() == null || user.getConfirmPassword().isEmpty()) {
-			throw new Exception("Confirm password es obligatorio");
+			throw new CustomFieldValidationException("Confirm password es obligatorio", "confirmPassword");
 		}
 
 		if (!user.getPassword().equals(user.getConfirmPassword())) {
-			throw new Exception("Las contraseñas no coinciden.");
+			throw new CustomFieldValidationException("Las contraseñas no coinciden.", "password");
 		}
 		return true;
 	}
@@ -108,7 +109,7 @@ public class UserServiceImpl implements UserService {
 		User user = getUserById(form.getId());
 
 		// verificar el password con él de la bbdd y comprobar si es admin o no
-		if (!loggedUserHasADMIN() && !user.getPassword().equals(form.getCurrentPassword())) {
+		if (!isloggedUserHasADMIN() && !user.getPassword().equals(form.getCurrentPassword())) {
 			throw new Exception("Password actual incorrecto.");
 		}
 
@@ -133,11 +134,13 @@ public class UserServiceImpl implements UserService {
 
 	// Comprobar si el usuario en sesión es ADMIN
 	// Obteniendo el objeto del usuario en sesión
-	public boolean loggedUserHasADMIN() {
+	public boolean isloggedUserHasADMIN() {
 		// recoger usuario autentificado
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
 		UserDetails loggedUser = null;
 		Object roles = null;
+		
 		// si es una instancia de userDet hacemos cast
 		if (principal instanceof UserDetails) {
 			loggedUser = (UserDetails) principal;
@@ -150,7 +153,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	// Obtener el usuario logeado
-	private User getLoggedUser() throws Exception {
+	@Override
+	public User getLoggedUser() throws Exception {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		UserDetails loggedUser = null;

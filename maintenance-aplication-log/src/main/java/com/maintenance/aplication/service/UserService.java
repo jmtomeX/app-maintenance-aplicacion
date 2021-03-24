@@ -18,5 +18,9 @@ public interface UserService {
 	
 	public User changePassword(ChangePasswordForm form) throws Exception;
 	
+	public User getLoggedUser() throws Exception;
+
+
+	
 	
 }

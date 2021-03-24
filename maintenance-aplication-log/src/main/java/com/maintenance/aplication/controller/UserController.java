@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.maintenance.aplication.Exception.CustomFieldValidationException;
 import com.maintenance.aplication.Exception.UsernameOrIdNotFound;
 import com.maintenance.aplication.dto.ChangePasswordForm;
 import com.maintenance.aplication.entity.User;
@@ -32,14 +33,15 @@ public class UserController {
 	@Autowired // solo es para mostrar datos no se crea, ni modifica por lo que no se usa una capa intermedia
 	RoleRepository roleRepository;
 
-	@GetMapping({"/","/login"})
+	@GetMapping({ "/", "/login" })
 	public String index() {
 		return "index";
 	}
 
 	@GetMapping("/userForm")
-	public String userForm(Model model) {
+	public String userForm(Model model) throws Exception {
 		model.addAttribute("userForm", new User());
+		model.addAttribute("userLogged", userService.getLoggedUser());
 		model.addAttribute("userList", userService.getAllUsers());
 		model.addAttribute("roles", roleRepository.findAll());
 		model.addAttribute("listTab", "active");
@@ -47,20 +49,25 @@ public class UserController {
 	}
 
 	@PostMapping("/userForm")
-	public String createUser(@Valid @ModelAttribute("userForm") User user, BindingResult result, Model model) {
+	public String createUser(@Valid @ModelAttribute("userForm") User user, BindingResult result, Model model) throws Exception {
 		if (result.hasErrors()) {
 			model.addAttribute("userForm", user);
 			model.addAttribute("formTab", "active");
-
 		} else {
-
 			try {
-
 				userService.createUser(user);
 				model.addAttribute("userForm", new User());
 				model.addAttribute("listTab", "active");
 
+			} catch (CustomFieldValidationException cfve) {
+				// Excepciones propias y añadidas debajo de cada input
+				result.rejectValue(cfve.getFieldName(), null, cfve.getMessage());
+				model.addAttribute("userForm", user);
+				model.addAttribute("formTab", "active");
+				model.addAttribute("userList", userService.getAllUsers());
+				model.addAttribute("roles", roleRepository.findAll());
 			} catch (Exception e) {
+				// excepciones genéricas
 				model.addAttribute("formErrorMessage", e.getMessage());
 				model.addAttribute("userForm", user);
 				model.addAttribute("formTab", "active");
@@ -69,6 +76,7 @@ public class UserController {
 			}
 		}
 		model.addAttribute("userList", userService.getAllUsers());
+		model.addAttribute("userLogged", userService.getLoggedUser());
 		model.addAttribute("roles", roleRepository.findAll());
 		return "user-form/user-view";
 	}
@@ -79,6 +87,7 @@ public class UserController {
 		User userToEdit = userService.getUserById(id);
 		model.addAttribute("userForm", userToEdit);
 		model.addAttribute("userList", userService.getAllUsers());
+		model.addAttribute("userLogged", userService.getLoggedUser());
 		model.addAttribute("roles", roleRepository.findAll());
 		model.addAttribute("formTab", "active");
 		model.addAttribute("editMode", "true");
@@ -89,9 +98,10 @@ public class UserController {
 	}
 
 	@PostMapping("/editUser")
-	public String editUser(@Valid @ModelAttribute("userForm") User user, BindingResult result, Model model) {
+	public String editUser(@Valid @ModelAttribute("userForm") User user, BindingResult result, Model model) throws Exception {
 		if (result.hasErrors()) {
 			model.addAttribute("userForm", user);
+			model.addAttribute("userLogged", userService.getLoggedUser());
 			model.addAttribute("formTab", "active");
 			model.addAttribute("editMode", "true");
 			// para actualizar la contraseña
@@ -102,11 +112,13 @@ public class UserController {
 			try {
 				userService.updateUser(user);
 				model.addAttribute("userForm", new User());
+				model.addAttribute("userLogged", userService.getLoggedUser());
 				model.addAttribute("listTab", "active");
 
 			} catch (Exception e) {
 				model.addAttribute("formErrorMessage", e.getMessage());
 				model.addAttribute("userForm", user);
+				model.addAttribute("userLogged", userService.getLoggedUser());
 				model.addAttribute("formTab", "active");
 				model.addAttribute("userList", userService.getAllUsers());
 				model.addAttribute("roles", roleRepository.findAll());
