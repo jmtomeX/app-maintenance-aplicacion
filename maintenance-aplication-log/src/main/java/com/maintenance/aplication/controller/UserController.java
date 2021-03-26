@@ -1,5 +1,7 @@
 package com.maintenance.aplication.controller;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.maintenance.aplication.Exception.CustomFieldValidationException;
 import com.maintenance.aplication.Exception.UsernameOrIdNotFound;
 import com.maintenance.aplication.dto.ChangePasswordForm;
+import com.maintenance.aplication.entity.Role;
 import com.maintenance.aplication.entity.User;
 import com.maintenance.aplication.respository.RoleRepository;
 import com.maintenance.aplication.service.UserService;
@@ -38,6 +41,54 @@ public class UserController {
 		return "index";
 	}
 
+	@GetMapping("/signup")
+	public String signup(Model model) {
+		// recogeemos el role para asignar solo el role user
+		Role userRole = roleRepository.findByName("USER");
+		// para evitar tener que modificar el formulario se crea una lista, ya que se usa el formulario común
+		List<Role> roles = Arrays.asList(userRole);
+		
+		model.addAttribute("signup",true);
+		
+		model.addAttribute("userForm", new User());
+		model.addAttribute("roles", roles);
+
+		return "user-form/user-signup";
+	}
+
+	@PostMapping("/signup")
+	public String postSignup(@Valid @ModelAttribute("userForm") User user, BindingResult result, ModelMap model) {
+		System.out.println("entra en crear signup");
+		// recogemos el role para asignar solo el role user
+		Role userRole = roleRepository.findByName("USER");
+		// para evitar tener que modificar el formulario se crea una lista, ya que se usa el formulario común
+		List<Role> roles = Arrays.asList(userRole);
+
+		model.addAttribute("userForm", user);
+		model.addAttribute("roles", roles);
+
+		model.addAttribute("signup", true);
+
+		if (result.hasErrors()) {
+			return "user-form/user-signup";
+		} else {
+			try {
+				userService.createUser(user);
+
+			} catch (CustomFieldValidationException cfve) {
+				// Excepciones propias y añadidas debajo de cada input
+				result.rejectValue(cfve.getFieldName(), null, cfve.getMessage());
+				return "user-form/user-signup";
+
+			} catch (Exception e) {
+				// excepciones genéricas
+				model.addAttribute("formErrorMessage", e.getMessage());
+				return "user-form/user-signup";
+			}
+		}
+		return index();
+	}
+
 	@GetMapping("/userForm")
 	public String userForm(Model model) throws Exception {
 		model.addAttribute("userForm", new User());
@@ -50,6 +101,7 @@ public class UserController {
 
 	@PostMapping("/userForm")
 	public String createUser(@Valid @ModelAttribute("userForm") User user, BindingResult result, Model model) throws Exception {
+		System.out.println("entra en crear usuario");
 		if (result.hasErrors()) {
 			model.addAttribute("userForm", user);
 			model.addAttribute("formTab", "active");
@@ -134,6 +186,7 @@ public class UserController {
 
 	@GetMapping("/userForm/cancel")
 	public String cancelEditUser(ModelMap model) {
+		model.addAttribute("userForm", new User());// para vaciar el formulario
 		return "redirect:/userForm";
 	}
 

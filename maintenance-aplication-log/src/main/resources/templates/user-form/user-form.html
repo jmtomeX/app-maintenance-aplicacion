@@ -4,8 +4,9 @@
 
 	<form class="form-horizontal" role="form" autocomplete="off"
 		th:object="${userForm}"
-		th:action="${editMode} ? @{/editUser}: @{/userForm}" method="post">
-
+		th:action="${signup}?@{/signup}:(${editMode} ?@{/editUser} :@{/userForm})"
+		method="post">
+		<!-- comprueba si está en signup y pide el método signup si no verifica si está en modo editar o no-->
 
 		<input class="form-control" type=hidden name="password" value="xxxxx"
 			th:if="${editMode}">
@@ -24,8 +25,9 @@
 				</div>
 				<div class="col-sm-10">
 					<input id="name" class="form-control" type="text"
-						th:field="${userForm.firstName}" aria-describedby="nameHelpInline" th:disabled="${disableFields}">
-						 <!--disableFields se crea arriba con la condición del primer div -->
+						th:field="${userForm.firstName}" aria-describedby="nameHelpInline"
+						th:disabled="${disableFields}">
+					<!--disableFields se crea arriba con la condición del primer div -->
 				</div>
 
 				<div id="nameHelpInline" th:if="${#fields.hasErrors('firstName')}"
@@ -79,7 +81,8 @@
 					<label class="col-form-label">Roles</label>
 				</div>
 				<div class="col-sm-6">
-					<select class="form-control" size="1" th:field="${userForm.roles}" th:if="${!disableFields}">
+					<select class="form-control" size="1" th:field="${userForm.roles}"
+						th:if="${!disableFields}">
 						<option th:each="role :${roles}" th:value="${role.id}"
 							th:text="${role.name}"></option>
 					</select>
@@ -97,7 +100,8 @@
 				</div>
 				<div class="col-sm-4">
 					<input class="form-control" type="password"
-						th:field="${userForm.password}" name="confirmPassword" th:disabled="${disableFields}">
+						th:field="${userForm.password}" name="confirmPassword"
+						th:disabled="${disableFields}">
 				</div>
 				<div class="col-auto alert-danger my-2"
 					th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name
@@ -107,7 +111,8 @@
 				</div>
 				<div class="col-sm-4">
 					<input class="form-control" type="password"
-						th:field="${userForm.confirmPassword}" name="confirmPassword" th:disabled="${disableFields}">
+						th:field="${userForm.confirmPassword}" name="confirmPassword"
+						th:disabled="${disableFields}">
 				</div>
 				<div class="col-auto alert-danger my-2"
 					th:if="${#fields.hasErrors('confirmPassword')}"
@@ -121,12 +126,15 @@
 					<button type="button" class="btn btn-secondary" data-toggle="modal"
 						th:if="${editMode}" data-target="#changePasswordModal">Cambiar
 						Password</button>
+
 					<!-- <input type="submit" class="btn btn-primary my-3"
 						value="Guardar cambios"
 						th:value="${editMode} ? 'Modificar usuario':'Crear usuario'" th:disabled="${disableFields}"> -->
+
 					<input type="submit" class="btn btn-primary my-3"
 						value="Guardar cambios"
-						th:value="${editMode} ? 'Modificar usuario':'Crear usuario'" th:if="${!disableFields}">
+						th:value="${editMode} ? 'Modificar usuario':'Crear usuario'"
+						th:if="${!disableFields}">
 
 				</div>
 			</div>
