@@ -82,7 +82,8 @@
 				</div>
 				<div class="col-sm-6">
 					<select class="form-control" size="1" th:field="${userForm.roles}"
-						th:if="${!disableFields}">
+					th:disabled="${disableFields}"
+						>
 						<option th:each="role :${roles}" th:value="${role.id}"
 							th:text="${role.name}"></option>
 					</select>
